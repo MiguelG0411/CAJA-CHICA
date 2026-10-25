@@ -251,7 +251,13 @@ button{cursor:pointer;-webkit-tap-highlight-color:transparent}
 .sheet h3{margin:4px 0 2px;font-size:1.2rem}
 label.f{display:block;font-size:.85rem;color:var(--muted);font-weight:600;margin:14px 0 6px}
 .field{width:100%;padding:12px 14px;border-radius:14px;border:1px solid var(--line);background:var(--surface)}
-.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.field{min-width:0;height:48px;font-size:1rem;line-height:1.2}
+.field.bigamt{height:auto}
+input[type=date].field{-webkit-appearance:none;appearance:none;display:block;text-align:left}
+input[type=date].field::-webkit-date-and-time-value{text-align:left}
+select.field{-webkit-appearance:none;appearance:none;padding-right:36px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%236b7785' stroke-width='2'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center}
+.row2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px;align-items:end}
+.row2>div{min-width:0}
 .calc{background:var(--surface);border:1px dashed var(--line);border-radius:14px;padding:12px 14px;margin-top:14px}
 .primary{width:100%;margin-top:18px;padding:15px;border:0;border-radius:16px;background:var(--cu);color:#fff;font-weight:700;font-size:1.05rem}
 .secondary{width:100%;margin-top:10px;padding:13px;border:1px solid var(--line);border-radius:16px;background:var(--surface);font-weight:700}
@@ -339,7 +345,7 @@ label.f{display:block;font-size:.85rem;color:var(--muted);font-weight:600;margin
     <div id="qList"></div>
   </section>
   <p class="note" id="note"></p>
-  <footer class="credit">Diseñado por <b>BG IA Solutions</b><br><a href="tel:+56955374077">📞 +56 9 5537 4077</a><br><a href="tel:+56957220849">📞 +56 9 5722 0849</a><br><a href="https://bgiasolutions.cl/" target="_blank" rel="noopener">🌐 bgiasolutions.cl</a></footer>
+  <footer class="credit">Diseñado por <b>BG Solutions</b><br><a href="tel:+56955374077">📞 +56 9 5537 4077</a><br><a href="tel:+56957220849">📞 +56 9 5722 0849</a><br><a href="https://bgiasolutions.cl/" target="_blank" rel="noopener">🌐 bgiasolutions.cl</a></footer>
 </div>
 <div class="sheet-bg" id="bg"></div>
 <section class="sheet" id="sheet" role="dialog"><div class="grab"></div><div id="sheetBody"></div></section>
@@ -533,7 +539,7 @@ function pdfPeriodo(){
   const body=[[fdate(p.inicio),'Monto inicial','','','','',$$(p.inicial)]].concat(M.map(m=>{run+=m.tipo==='in'?m.monto:-m.monto;return [fdate(m.fecha),m.persona||'',m.concepto||'',m.medio+(m.doc?' N°'+m.doc:''),m.tipo==='in'?$$(m.monto):'',m.tipo==='out'?$$(m.monto):'',$$(run)]}));
   doc.setFont('helvetica','bold');doc.setFontSize(10);doc.text('Movimientos',12,y);
   doc.autoTable({startY:y+2,head:[['Fecha','Persona','Concepto','Medio','Entrada','Salida','Saldo']],body,styles:{fontSize:8,cellPadding:1.6,textColor:[20,33,45]},headStyles:{fillColor:[30,111,168],textColor:255},alternateRowStyles:{fillColor:[245,247,249]},columnStyles:{4:{halign:'right',textColor:[31,138,91]},5:{halign:'right',textColor:[185,68,47]},6:{halign:'right',fontStyle:'bold'}},margin:{left:12,right:12},
-    didDrawPage:()=>{const ph=doc.internal.pageSize.getHeight();doc.setFontSize(7.5);doc.setTextColor(120);doc.text('Generado el '+new Date().toLocaleDateString('es-CL')+' - App Caja Chica - Diseñado por BG IA Solutions',12,ph-7);doc.text('Página '+doc.internal.getNumberOfPages(),W-12,ph-7,{align:'right'})}});
+    didDrawPage:()=>{const ph=doc.internal.pageSize.getHeight();doc.setFontSize(7.5);doc.setTextColor(120);doc.text('Generado el '+new Date().toLocaleDateString('es-CL')+' - App Caja Chica - Diseñado por BG Solutions',12,ph-7);doc.text('Página '+doc.internal.getNumberOfPages(),W-12,ph-7,{align:'right'})}});
   const g={};M.forEach(m=>{const k=m.persona||'Sin persona';const o=g[k]=g[k]||{o:0,i:0};o[m.tipo==='in'?'i':'o']+=m.monto});
   y=doc.lastAutoTable.finalY+8;doc.setFont('helvetica','bold');doc.setFontSize(10);doc.setTextColor(20,33,45);doc.text('Resumen por persona',12,y);
   doc.autoTable({startY:y+2,head:[['Persona','Entregado','Recibido','Neto entregado']],body:Object.keys(g).sort().map(k=>[k,$$(g[k].o),$$(g[k].i),$$(g[k].o-g[k].i)]),styles:{fontSize:8.5,cellPadding:1.8,textColor:[20,33,45]},headStyles:{fillColor:[30,111,168],textColor:255},columnStyles:{1:{halign:'right'},2:{halign:'right'},3:{halign:'right',fontStyle:'bold'}},margin:{left:12,right:12}});
